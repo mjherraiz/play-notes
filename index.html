@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Play scale</title>
+</head>
+
+<script>
+    window.onload = init;
+    var context;
+    var notes = {
+        "C": 32.7,
+        "C# ": 34.65,
+//        "Db ": 34.65,
+        "D": 36.71,
+        "D#": 38.89,
+//        "Eb": 38.89,
+        "E": 41.2,
+        "F": 43.65,
+        "F#": 46.25,
+//        "Gb": 46.25,
+        "G": 49,
+        "G#": 51.91,
+//        "Ab":51.91,
+        "A": 55,
+        "A#": 58.27,
+//        "Bb": 58.27,
+        "B": 61.74
+    };
+
+    function init() {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        context = new AudioContext();
+    }
+
+    function scale() {
+        for (var i in notes) {
+            console.log(i);
+            play(notes[i] * 20);
+            sleep(1000);
+        }
+    }
+    function sleep(milliseconds) {
+        var start = new Date().getTime();
+        for (var i = 0; i < 1e7; i++) {
+            if ((new Date().getTime() - start) > milliseconds) {
+                break;
+            }
+        }
+    }
+    function play(freq) {
+        var o = context.createOscillator();
+        o.frequency.setTargetAtTime(freq, context.currentTime, 0);
+        g = context.createGain();
+        g.gain.setTargetAtTime(1, context.currentTime, 0);
+        o.start(0);
+        o.connect(context.destination);
+        o.stop(context.currentTime + 0.9);
+
+    }
+</script>
+<body>
+<input type="button" onclick="scale();" value="Play Scale">
+</body>
+</html>
